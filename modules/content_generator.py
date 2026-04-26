@@ -43,76 +43,94 @@ OUTPUT_DIR   = "data/articles"
 
 # ─── PROMPTS PAR TYPE DE CONTENU ─────────────────────────────────────────────
 
-PROMPTS = {
-    "guide": """Tu es un expert juridique francophone. Rédige un guide pratique complet et optimisé SEO sur : "{keyword}"
+LEGAL_CONTEXT = {
+    "france": """Contexte juridique FRANCE uniquement :
+- Code civil français (articles 1344 et suivants pour la mise en demeure)
+- Procédures : LRAR, huissier de justice, tribunal judiciaire
+- Délais : selon le Code civil et la jurisprudence française
+- Montants/coûts en euros, références aux lois françaises
+- NE PAS mentionner le droit marocain""",
 
-Cible : {zone} (français courant, accessible, pas de jargon inutile)
+    "maroc": """Contexte juridique MAROC uniquement :
+- Code des Obligations et Contrats (DOC) marocain
+- Procédures : mise en demeure par lettre recommandée, adoul, tribunal de première instance
+- Délais : selon le DOC et la jurisprudence marocaine
+- Montants/coûts en dirhams (MAD), références aux lois marocaines
+- Vocabulaire adapté : "huissier de justice" existe aussi au Maroc
+- NE PAS mentionner le droit français""",
+}
+
+PROMPTS = {
+    "guide": """Tu es un expert juridique francophone spécialisé en droit {pays_label}. Rédige un guide pratique complet et optimisé SEO sur : "{keyword}"
+
+{legal_context}
 Niche : {niche}
 Longueur : 1400-1800 mots
 
 Structure OBLIGATOIRE en HTML (sans DOCTYPE ni <html> ni <body>, juste le contenu) :
-- <h1> : titre accrocheur contenant le mot-clé exact
-- Introduction (150 mots) : contexte + pourquoi c'est important
-- <h2> : "Qu'est-ce que {keyword_court} ?" — définition claire
-- <h2> : "Comment procéder étape par étape" — liste numérotée avec <ol><li>
+- <h1> : titre accrocheur contenant le mot-clé exact + mention {pays_label}
+- Introduction (150 mots) : contexte + pourquoi c'est important en {pays_label}
+- <h2> : "Qu'est-ce que {keyword_court} ?" — définition selon le droit {pays_label}
+- <h2> : "Comment procéder étape par étape en {pays_label}" — liste numérotée <ol><li>
+- <h2> : "Cadre légal {pays_label}" — textes de loi applicables, articles précis
 - <h2> : "Les erreurs à éviter" — liste <ul><li>
-- <h2> : "Questions fréquentes" — 3 questions/réponses format <details><summary>
+- <h2> : "Questions fréquentes" — 3 Q/R format <details><summary>
 - <h2> : "Conclusion" — résumé + appel à l'action
 - Balises <strong> sur les mots-clés importants
 - Ton : professionnel mais accessible, rassurant
 
 Réponds UNIQUEMENT avec le HTML, aucun texte avant ou après.""",
 
-    "comparatif": """Tu es un expert en droit et finance francophone. Rédige un article comparatif optimisé SEO sur : "{keyword}"
+    "comparatif": """Tu es un expert en droit {pays_label}. Rédige un article comparatif optimisé SEO sur : "{keyword}"
 
-Cible : {zone}
+{legal_context}
 Niche : {niche}
 Longueur : 1200-1600 mots
 
 Structure OBLIGATOIRE en HTML (sans DOCTYPE ni <html> ni <body>) :
-- <h1> : titre comparatif accrocheur avec le mot-clé
-- Introduction (120 mots) : problématique + ce que l'article va comparer
+- <h1> : titre comparatif accrocheur avec le mot-clé + mention {pays_label}
+- Introduction (120 mots) : problématique selon le droit {pays_label}
 - <h2> : tableau comparatif HTML <table> avec colonnes pertinentes
-- <h2> : analyse détaillée option 1
-- <h2> : analyse détaillée option 2
-- <h2> : "Notre recommandation selon votre situation" — 2-3 profils types
+- <h2> : analyse détaillée option 1 (selon loi {pays_label})
+- <h2> : analyse détaillée option 2 (selon loi {pays_label})
+- <h2> : "Notre recommandation selon votre situation en {pays_label}"
 - <h2> : "Questions fréquentes" — 3 Q/R format <details><summary>
 - Balises <strong> sur points clés
 - Ton : objectif, factuel, expert
 
 Réponds UNIQUEMENT avec le HTML, aucun texte avant ou après.""",
 
-    "modele_document": """Tu es un juriste francophone. Rédige une page complète sur : "{keyword}"
+    "modele_document": """Tu es un juriste spécialisé en droit {pays_label}. Rédige une page complète sur : "{keyword}"
 
-Cible : {zone}
+{legal_context}
 Niche : {niche}
 Longueur : 1000-1400 mots
 
 Structure OBLIGATOIRE en HTML (sans DOCTYPE ni <html> ni <body>) :
-- <h1> : titre avec le mot-clé exact
-- Introduction (100 mots) : à quoi sert ce document, dans quel cas l'utiliser
-- <h2> : "Modèle {keyword_court}" — le modèle dans un <div class="modele-doc"><pre> avec toutes les mentions obligatoires
-- <h2> : "Comment remplir ce modèle" — explications champ par champ
-- <h2> : "Mentions obligatoires" — liste <ul><li>
-- <h2> : "Envoi et délais" — comment envoyer, délais légaux
+- <h1> : titre avec le mot-clé exact + mention {pays_label}
+- Introduction (100 mots) : à quoi sert ce document selon le droit {pays_label}
+- <h2> : "Modèle {keyword_court} ({pays_label})" — modèle dans <div class="modele-doc"><pre> avec mentions obligatoires selon la loi {pays_label}
+- <h2> : "Comment remplir ce modèle" — explications adaptées au contexte {pays_label}
+- <h2> : "Mentions obligatoires selon la loi {pays_label}" — liste <ul><li>
+- <h2> : "Envoi et délais légaux en {pays_label}" — procédure exacte + délais légaux
 - <h2> : "Questions fréquentes" — 3 Q/R format <details><summary>
 - Ton : pratique, direct, rassurant
 
 Réponds UNIQUEMENT avec le HTML, aucun texte avant ou après.""",
 
-    "faq": """Tu es un expert francophone. Rédige une page FAQ complète optimisée SEO sur : "{keyword}"
+    "faq": """Tu es un expert en droit {pays_label}. Rédige une page FAQ complète optimisée SEO sur : "{keyword}"
 
-Cible : {zone}
+{legal_context}
 Niche : {niche}
 Longueur : 1000-1400 mots
 
 Structure OBLIGATOIRE en HTML (sans DOCTYPE ni <html> ni <body>) :
-- <h1> : titre FAQ accrocheur avec le mot-clé
-- Introduction (100 mots) : pourquoi cette FAQ, à qui elle s'adresse
+- <h1> : titre FAQ accrocheur avec le mot-clé + mention {pays_label}
+- Introduction (100 mots) : contexte juridique {pays_label}
 - 8 à 10 questions/réponses format <details><summary> (schema.org FAQPage)
-  → Questions variées : définition, procédure, coût, délai, cas particuliers
-  → Réponses complètes de 100-150 mots chacune
-- <h2> : "Résumé" — tableau récapitulatif des points essentiels
+  → Questions sur procédure, coût, délais selon droit {pays_label}
+  → Réponses complètes de 100-150 mots chacune avec références légales {pays_label}
+- <h2> : "Résumé" — tableau récapitulatif selon loi {pays_label}
 - Balises <strong> sur les termes importants
 - Ton : pédagogique, clair, exhaustif
 
@@ -183,24 +201,23 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
 # ─── GÉNÉRATION CLAUDE ────────────────────────────────────────────────────────
 
-def generate_article(kw: dict, niche: str) -> str | None:
+def generate_article(kw: dict, niche: str, force_zone: str = None) -> str | None:
     """Génère le contenu HTML d'un article via Claude API."""
     keyword     = kw["keyword"]
     type_c      = kw.get("type_contenu", "guide")
-    zone        = kw.get("zone_cible", "les_deux")
+    zone        = force_zone or kw.get("zone_cible", "les_deux")
     prompt_tpl  = PROMPTS.get(type_c, PROMPTS["guide"])
 
-    # Label zone
-    zone_map = {"france": "France 🇫🇷", "maroc": "Maroc 🇲🇦", "les_deux": "France 🇫🇷 & Maroc 🇲🇦"}
-    zone_label = zone_map.get(zone, "France & Maroc")
-
-    # Mot-clé court (2 premiers mots)
+    pays_map   = {"france": "France", "maroc": "Maroc"}
+    pays_label = pays_map.get(zone, "France")
+    legal_ctx  = LEGAL_CONTEXT.get(zone, LEGAL_CONTEXT["france"])
     keyword_court = " ".join(keyword.split()[:3])
 
     prompt = prompt_tpl.format(
         keyword=keyword,
         keyword_court=keyword_court,
-        zone=zone_label,
+        pays_label=pays_label,
+        legal_context=legal_ctx,
         niche=niche,
     )
 
@@ -234,11 +251,11 @@ def generate_article(kw: dict, niche: str) -> str | None:
         return None
 
 
-def build_html(kw: dict, content: str, niche: str) -> str:
+def build_html(kw: dict, content: str, niche: str, force_zone: str = None) -> str:
     """Enveloppe le contenu dans le template HTML complet."""
     keyword   = kw["keyword"]
     type_c    = kw.get("type_contenu", "guide")
-    zone      = kw.get("zone_cible", "les_deux")
+    zone      = force_zone or kw.get("zone_cible", "les_deux")
     rpm       = kw.get("potentiel_rpm", 0)
 
     zone_map  = {"france": "France 🇫🇷", "maroc": "Maroc 🇲🇦", "les_deux": "France 🇫🇷 & Maroc 🇲🇦"}
@@ -285,12 +302,11 @@ def ftp_upload(filepath: str, filename: str) -> bool:
         ftp = ftplib.FTP(FTP_HOST, timeout=15)
         ftp.login(FTP_USER, FTP_PASSWORD)
         # Créer le dossier si nécessaire
-        if FTP_DIR and FTP_DIR not in ('/', 'ROOT'):
-            try:
-                ftp.mkd(FTP_DIR)
-            except Exception:
-                pass
-            ftp.cwd(FTP_DIR)
+        try:
+            ftp.mkd(FTP_DIR)
+        except Exception:
+            pass
+        ftp.cwd(FTP_DIR)
         with open(filepath, "rb") as f:
             ftp.storbinary(f"STOR {filename}", f)
         ftp.quit()
@@ -337,39 +353,49 @@ def run(input_file: str, niche: str = "juridique", limit: int = None, ftp: bool 
         type_c   = kw.get("type_contenu", "guide")
         score    = kw.get("score_global", "?")
         rpm      = kw.get("potentiel_rpm", "?")
+        zone     = kw.get("zone_cible", "les_deux")
+
+        # Déterminer les zones à générer
+        if zone == "les_deux":
+            zones_to_gen = ["france", "maroc"]
+        else:
+            zones_to_gen = [zone]
 
         print(f"  [{i}/{total}] {keyword}")
-        print(f"         type:{type_c} | score:{score}/10 | RPM:{rpm}€")
+        print(f"         type:{type_c} | score:{score}/10 | RPM:{rpm}€ | zones:{'+'.join(zones_to_gen)}")
 
-        # Générer le contenu
-        content = generate_article(kw, niche)
-        if not content:
-            errors += 1
-            print(f"         ❌ Échec génération\n")
-            continue
+        for z in zones_to_gen:
+            z_label = "🇫🇷" if z == "france" else "🇲🇦"
+            print(f"         {z_label} Génération version {z}...")
 
-        # Construire le HTML complet
-        html = build_html(kw, content, niche)
+            content = generate_article(kw, niche, force_zone=z)
+            if not content:
+                errors += 1
+                print(f"         ❌ Échec génération {z}")
+                continue
 
-        # Sauvegarder
-        filename = f"{slug(keyword)}.html"
-        filepath = os.path.join(OUTPUT_DIR, filename)
-        with open(filepath, "w", encoding="utf-8") as f:
-            f.write(html)
+            html = build_html(kw, content, niche, force_zone=z)
 
-        success += 1
-        print(f"         ✅ Sauvegardé → {filepath}")
+            # Nom de fichier avec suffixe zone
+            z_suffix = "-france" if z == "france" else "-maroc"
+            filename = f"{slug(keyword)}{z_suffix}.html"
+            filepath = os.path.join(OUTPUT_DIR, filename)
+            with open(filepath, "w", encoding="utf-8") as f:
+                f.write(html)
 
-        # Upload FTP
-        if ftp:
-            uploaded = ftp_upload(filepath, filename)
-            if uploaded:
-                url = f"http://{FTP_USER}.free.fr{FTP_DIR}/{filename}"
-                urls.append(url)
-                print(f"         🌐 En ligne → {url}")
+            success += 1
+            print(f"         ✅ Sauvegardé → {filepath}")
+
+            if ftp:
+                uploaded = ftp_upload(filepath, filename)
+                if uploaded:
+                    url = f"http://{FTP_USER}.free.fr/{filename}"
+                    urls.append(url)
+                    print(f"         🌐 En ligne → {url}")
+
+            time.sleep(1)
 
         print()
-        time.sleep(1)  # Éviter rate limit Claude
 
     # Résumé
     print(f"{'─'*60}")
