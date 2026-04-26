@@ -40,11 +40,11 @@ NICHE_RPM_BASE = {
 # ─── KEYWORD GENERATOR ───────────────────────────────────────────────────────
 KG_CONFIG = {
     "autocomplete_max_per_seed": 10,   # suggestions Google par seed
-    "claude_expansions":          20,   # variantes supplémentaires via Claude
+    "claude_expansions":          10,   # variantes supplémentaires via Claude
     "min_score_export":            5,   # score minimum pour inclure dans export (sur 10)
     "output_dir":                 "data/keywords",
 }
 
 # ─── CLAUDE MODEL ────────────────────────────────────────────────────────────
 CLAUDE_MODEL = "claude-sonnet-4-20250514"
-CLAUDE_MAX_TOKENS = 2000
+CLAUDE_MAX_TOKENS = 8192

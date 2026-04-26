@@ -130,7 +130,7 @@ def claude_expand_and_score(
         print("  ⚠️  ANTHROPIC_API_KEY manquante — scoring simulé")
         return _mock_scoring(autocomplete_suggestions, rpm_base)
 
-    suggestions_str = "\n".join(f"- {s}" for s in autocomplete_suggestions[:40])
+    suggestions_str = "\n".join(f"- {s}" for s in autocomplete_suggestions[:10])
 
     prompt = f"""Tu es un expert SEO francophone spécialisé en niche **{niche}**.
 
@@ -193,7 +193,7 @@ Aucun texte avant ou après le JSON."""
             method="POST"
         )
 
-        with urllib.request.urlopen(req, timeout=30) as resp:
+        with urllib.request.urlopen(req, timeout=60) as resp:
             data = json.loads(resp.read().decode("utf-8"))
             raw = data["content"][0]["text"]
             # Nettoyer les éventuels backticks
